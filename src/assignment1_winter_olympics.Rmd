@@ -130,7 +130,8 @@ topcountry.game
 ```{r}
 #how many medals of each type the country won
 has.medal <- is.winter %>% drop_na(Medal)
-#gold
+
+#plot gold medals by country
 topcountry.gold <- has.medal%>%
   filter(Medal == "Gold") %>%
   group_by(NOC) %>% 
@@ -139,19 +140,24 @@ topcountry.gold <- has.medal%>%
   mutate(rank = row_number())
 
 plot_gold<-head(topcountry.gold,25) %>%
-  ggplot(aes(x=reorder(NOC, count), y=count,fill=NOC),fill=NOC)+
+  ggplot(aes(x=reorder(NOC, count),y=count,fill=NOC),fill=NOC)+
   geom_bar(stat="identity")+
   scale_fill_discrete("Number of Gold Medals")+
-  scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
+  scale_fill_manual(values=c("USA" = "dodgerblue2",
+                             "CAN"= "brown1"))+
   theme_bw()+
-  theme(legend.position="left", legend.title=element_text(size=8), legend.text=element_text(size=8))+
+  theme(legend.position="left",
+        legend.title=element_text(size=8), legend.text=element_text(size=8))+
   labs(x="Name Of Countries", y="Medals Count", title="Number Of Gold Medals Won")+
   theme(plot.title=element_text(hjust=0.5, size=8))+
-  theme(axis.text.x=element_text(size=9),axis.text.y=element_text(size=8),axis.title.x=element_text(size=10), axis.title.y= element_text(size=10))+
+  theme(axis.text.x=element_text(size=9),
+        axis.text.y=element_text(size=8),
+        axis.title.x=element_text(size=10),
+        axis.title.y= element_text(size=10))+
   guides(fill="none")+
   coord_flip()
 
-#silver
+#plot silver medals by country
 topcountry.silver <- has.medal%>%
   filter(Medal == "Silver") %>%
   group_by(NOC) %>% 
@@ -160,19 +166,25 @@ topcountry.silver <- has.medal%>%
   mutate(rank = row_number())
 
 
-plot_silver<-head(topcountry.silver,25) %>%
+plot_silver <- head(topcountry.silver,25) %>%
   ggplot(aes(x=reorder(NOC, count), y=count,fill=NOC),fill=NOC)+
   geom_bar(stat="identity")+
   scale_fill_discrete("Number of Silver Medals")+
   scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
   theme_bw()+
   theme(legend.position="left", legend.title=element_text(size=8), legend.text=element_text(size=8))+
-  labs(x="Name Of Countries", y="Medals Count", title="Number Of Silver Medals Won")+
+  labs(x="Name Of Countries",
+       y="Medals Count",
+       title="Number Of Silver Medals Won")+
   theme(plot.title=element_text(hjust=0.5, size=8))+
-  theme(axis.text.x=element_text(size=9),axis.text.y=element_text(size=8),axis.title.x=element_text(size=10), axis.title.y= element_text(size=10))+
+  theme(axis.text.x=element_text(size=9),
+        axis.text.y=element_text(size=8),
+        axis.title.x=element_text(size=10),
+        axis.title.y= element_text(size=10))+
   guides(fill="none")+
   coord_flip()
-#bronze
+
+#plot bronze medals by country
 topcountry.bronze <- has.medal%>%
   filter(Medal == "Bronze") %>%
   group_by(NOC) %>% 
@@ -187,13 +199,20 @@ plot_bronze<-head(topcountry.bronze,25) %>%
   scale_fill_discrete("NOC")+
   scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
   theme_bw()+
-  theme(legend.position="left", legend.title=element_text(size=8), legend.text=element_text(size=8))+
-  labs(x="Name Of Countries", y="Medals Count", title="Number Of Bronze Medals Won")+
+  theme(legend.position="left", 
+        legend.title=element_text(size=8),
+        legend.text=element_text(size=8))+
+  labs(x="Name Of Countries", y="Medals Count",
+       title="Number Of Bronze Medals Won")+
   theme(plot.title=element_text(hjust=0.5, size=8))+
-  theme(axis.text.x=element_text(size=9),axis.text.y=element_text(size=8),axis.title.x=element_text(size=10), axis.title.y= element_text(size=10))+
+  theme(axis.text.x=element_text(size=9),
+        axis.text.y=element_text(size=8),
+        axis.title.x=element_text(size=10),
+        axis.title.y= element_text(size=10))+
   guides(fill="none")+
   coord_flip()
 
+#aggregate all the plots together
 plot1<-ggarrange(plot_gold, plot_silver, plot_bronze,nrow=1, ncol=3)
 plot1
 ```
