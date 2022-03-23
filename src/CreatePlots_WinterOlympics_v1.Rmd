@@ -104,7 +104,7 @@ medals_count_year_top10 <- medals_count_year %>%
 #create plot
 plot <- ggplot(medals_count_year_top10, aes(x = Year, y = n, group = NOC, color = NOC)) +
   geom_line() +
-  labs(y="Number of Medals", x="Year") +
+  labs(y ="Number of Medals", x ="Year") +
   ggtitle("Trends Of Number of Medals Won") +
   theme_bw()
 
@@ -120,9 +120,9 @@ topcountry.game<-is.winter %>%
   group_by(NOC) %>%
   select(Year) %>%
   unique() %>%
-  summarize(count=n()) %>%
+  summarize(count = n()) %>%
   arrange(desc(count),NOC) %>%
-  mutate(ranke=row_number())
+  mutate(ranke = row_number())
 topcountry.game
 ```
 ###### How many medals of each type the country won
@@ -135,80 +135,83 @@ has.medal <- is.winter %>% drop_na(Medal)
 topcountry.gold <- has.medal%>%
   filter(Medal == "Gold") %>%
   group_by(NOC) %>% 
-  summarize(count=n()) %>%
+  summarize(count = n()) %>%
   arrange(desc(count)) %>%
   mutate(rank = row_number())
 
 plot_gold<-head(topcountry.gold,25) %>%
-  ggplot(aes(x=reorder(NOC, count),y=count,fill=NOC),fill=NOC)+
-  geom_bar(stat="identity")+
+  ggplot(aes(x=reorder(NOC, count),y = count,fill = NOC),fill = NOC)+
+  geom_bar(stat = "identity")+
   scale_fill_discrete("Number of Gold Medals")+
   scale_fill_manual(values=c("USA" = "dodgerblue2",
                              "CAN"= "brown1"))+
   theme_bw()+
-  theme(legend.position="left",
-        legend.title=element_text(size=8), legend.text=element_text(size=8))+
+  theme(legend.position = "left",
+        legend.title = element_text(size = 8),
+        legend.text=element_text(size = 8))+
   labs(x="Name Of Countries", y="Medals Count", title="Number Of Gold Medals Won")+
-  theme(plot.title=element_text(hjust=0.5, size=8))+
-  theme(axis.text.x=element_text(size=9),
-        axis.text.y=element_text(size=8),
-        axis.title.x=element_text(size=10),
-        axis.title.y= element_text(size=10))+
-  guides(fill="none")+
+  theme(plot.title = element_text(hjust = 0.5, size = 8))+
+  theme(axis.text.x = element_text(size = 9),
+        axis.text.y = element_text(size = 8),
+        axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10))+
+  guides(fill = "none")+
   coord_flip()
 
 #plot silver medals by country
 topcountry.silver <- has.medal%>%
   filter(Medal == "Silver") %>%
   group_by(NOC) %>% 
-  summarize(count=n()) %>%
+  summarize(count = n()) %>%
   arrange(desc(count)) %>%
   mutate(rank = row_number())
 
 
 plot_silver <- head(topcountry.silver,25) %>%
-  ggplot(aes(x=reorder(NOC, count), y=count,fill=NOC),fill=NOC)+
-  geom_bar(stat="identity")+
+  ggplot(aes(x=reorder(NOC, count), y = count,fill = NOC),fill = NOC)+
+  geom_bar(stat ="identity")+
   scale_fill_discrete("Number of Silver Medals")+
-  scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
+  scale_fill_manual(values = c("USA" = "dodgerblue2", "CAN" = "brown1"))+
   theme_bw()+
-  theme(legend.position="left", legend.title=element_text(size=8), legend.text=element_text(size=8))+
+  theme(legend.position="left",
+        legend.title=element_text(size=8),
+        legend.text=element_text(size=8))+
   labs(x="Name Of Countries",
        y="Medals Count",
        title="Number Of Silver Medals Won")+
-  theme(plot.title=element_text(hjust=0.5, size=8))+
-  theme(axis.text.x=element_text(size=9),
-        axis.text.y=element_text(size=8),
-        axis.title.x=element_text(size=10),
-        axis.title.y= element_text(size=10))+
-  guides(fill="none")+
+  theme(plot.title = element_text(hjust = 0.5, size = 8))+
+  theme(axis.text.x = element_text(size = 9),
+        axis.text.y = element_text(size = 8),
+        axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10))+
+  guides(fill = "none")+
   coord_flip()
 
 #plot bronze medals by country
 topcountry.bronze <- has.medal%>%
   filter(Medal == "Bronze") %>%
   group_by(NOC) %>% 
-  summarize(count=n()) %>%
+  summarize(count = n()) %>%
   arrange(desc(count)) %>%
   mutate(rank = row_number())
 
 
 plot_bronze<-head(topcountry.bronze,25) %>%
-  ggplot(aes(x=reorder(NOC, count), y=count, fill=NOC))+
-  geom_bar(stat="identity")+
+  ggplot(aes(x = reorder(NOC, count), y = count, fill = NOC))+
+  geom_bar(stat ="identity")+
   scale_fill_discrete("NOC")+
-  scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
+  scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN" = "brown1"))+
   theme_bw()+
   theme(legend.position="left", 
-        legend.title=element_text(size=8),
-        legend.text=element_text(size=8))+
-  labs(x="Name Of Countries", y="Medals Count",
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 8))+
+  labs(x="Name Of Countries", y = "Medals Count",
        title="Number Of Bronze Medals Won")+
-  theme(plot.title=element_text(hjust=0.5, size=8))+
-  theme(axis.text.x=element_text(size=9),
-        axis.text.y=element_text(size=8),
-        axis.title.x=element_text(size=10),
-        axis.title.y= element_text(size=10))+
+  theme(plot.title = element_text(hjust = 0.5, size = 8))+
+  theme(axis.text.x = element_text(size = 9),
+        axis.text.y = element_text(size = 8),
+        axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10))+
   guides(fill="none")+
   coord_flip()
 
@@ -228,8 +231,8 @@ There are different ways to calculate "success". Consider the following variants
 Now, adjust the ranking of medal success by (a) GDP per capita and (b) population. You have now three rankings: unadjusted ranking, adjusted by GDP per capita, and adjusted by population.
 ```{r}
 #create data frames by athlete
-ath <- merge(ath, noc, by.x="NOC", by.y="NOC")
-ath <- merge(ath, gdp, by.x="NOC", by.y="Code")
+ath <- merge(ath, noc, by.x = "NOC", by.y = "NOC")
+ath <- merge(ath, gdp, by.x = "NOC", by.y = "Code")
 
 #filter on Winter Olympic athletes
 medals_count <- ath[complete.cases(ath[ , 15]),] %>%
@@ -239,7 +242,7 @@ medals_count <- ath[complete.cases(ath[ , 15]),] %>%
 #count athlete medals
 medals_count <- medals_count[order(medals_count$n, decreasing=TRUE),]
 
-medal_gdp_df <- merge(medals_count, gdp, by.x="NOC", by.y="Code")
+medal_gdp_df <- merge(medals_count, gdp, by.x = "NOC", by.y ="Code")
 medal_gdp_df <- merge(medals_count, gdp, by.x = "NOC", 
              by.y = "Code",
              all.x = TRUE,
@@ -258,29 +261,29 @@ gdp_new <- medal_gdp_df$n/medal_gdp_df$GDP.per.Capita
 gdp_new
 
 #combine dataframes by column
-medal_gdp_df_1 <- cbind(medal_gdp_df,gdp_new)
+medal_gdp_df_1 <- cbind(medal_gdp_df, gdp_new)
 
 #create plot of medals by GDP
 medal_gdp_plot <-medal_gdp_df_1 %>%
-  ggplot(aes(x=reorder(NOC, gdp_new),
-             y=gdp_new,
-             fill=NOC))+
-  geom_bar(stat="identity")+
+  ggplot(aes(x = reorder(NOC, gdp_new),
+             y = gdp_new,
+             fill = NOC))+
+  geom_bar(stat ="identity")+
   scale_fill_discrete("NOC")+
-  scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
+  scale_fill_manual(values = c("USA" = "dodgerblue2", "CAN"= "brown1"))+
   theme_bw()+
   theme(legend.position="left",
-        legend.title=element_text(size=8),
-        legend.text=element_text(size=8))+
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 8))+
   labs(x="Name Of Countries",
        y="Medals Count",
        title="Number Of Medals Won Adjusted By Per.Capita.GDP")+
-  theme(plot.title=element_text(hjust=0.5, size=15))+
-  theme(axis.text.x=element_text(size=9),
-        axis.text.y=element_text(size=8),
-        axis.title.x=element_text(size=10),
-        axis.title.y= element_text(size=10))+
-  guides(fill="none")+
+  theme(plot.title = element_text(hjust = 0.5, size = 15))+
+  theme(axis.text.x = element_text(size = 9),
+        axis.text.y = element_text(size = 8),
+        axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10))+
+  guides(fill = "none")+
   coord_flip()
 
 medal_gdp_plot
@@ -293,24 +296,24 @@ medal_gdp_df_2 <- cbind(medal_gdp_df,pop_new)
 
 #create plot
 medal_gdp_plot <-medal_gdp_df_2 %>%
-  ggplot(aes(x=reorder(NOC, pop_new),
-             y=pop_new,
-             fill=NOC))+
-  geom_bar(stat="identity")+
+  ggplot(aes(x = reorder(NOC, pop_new),
+             y = pop_new,
+             fill = NOC))+
+  geom_bar(stat = "identity")+
   scale_fill_discrete("NOC")+
   scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
   theme_bw()+
   theme(legend.position="left",
-        legend.title=element_text(size=8),
-        legend.text=element_text(size=8))+
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 8))+
   labs(x="Name Of Countries",
        y="Medals Count",
        title="Number Of Medals Won Adjusted By Population")+
-  theme(plot.title=element_text(hjust=0.5, size=15))+
-  theme(axis.text.x=element_text(size=9),
-        axis.text.y=element_text(size=8),
-        axis.title.x=element_text(size=10),
-        axis.title.y= element_text(size=10))+
+  theme(plot.title = element_text(hjust = 0.5, size = 15))+
+  theme(axis.text.x = element_text(size = 9),
+        axis.text.y = element_text(size = 8),
+        axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10))+
   guides(fill="none")+
   coord_flip()
 
@@ -340,7 +343,7 @@ host_cities <- hosts %>% filter(Winter != "") %>%
 
 host_cities$Country[host_cities$Country ==	'Russia[h]'] <- 'Russia'
 
-diff <- numeric()
+home_adv_diff <- numeric()
 
 #count number of medals in the host year compared to the previous year's medals
 for(row in 1:nrow(host_cities)){
@@ -359,22 +362,22 @@ for(row in 1:nrow(host_cities)){
       nrow()
     print('The difference is ')
     print(host_medal- previous_medal)
-    diff[row] = host_medal-previous_medal
+    home_adv_diff[row] = host_medal-previous_medal
     } else{
-      diff[row] <- 0
+      home_adv_diff[row] <- 0
     }
   }
 
 #create data frame that aggregates the medal differences by country
-host_diff <- data.frame(country = host_cities$Country, diff)
+host_diff <- data.frame(country = host_cities$Country, home_adv_diff)
 
 #create plot
-ggplot(host_diff, aes(x=reorder(country, diff), y=diff, fill = country)) +   
+ggplot(host_diff, aes(x = reorder(country, diff), y = home_adv_diff, fill = country)) +   
   geom_bar(stat = "identity", width = 0.6) +
-  theme(axis.text.x=element_text(size=6),
-        axis.text.y=element_text(size=8),
-        axis.title.x=element_text(size=10),
-        axis.title.y= element_text(size=10))+
+  theme(axis.text.x = element_text(size = 6),
+        axis.text.y = element_text(size = 8),
+        axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10))+
   labs(y="Medal Difference", x="Host Country") +
   ggtitle("Visualization Of Host Country Advantage") +
   theme_hc()
@@ -400,8 +403,8 @@ top_15_player <- head(player_medals_count, 15)
 
 #plot the top 15 players
 plot_top_15_player <- ggplot(top_15_player,
-                             aes(x=reorder(Name, n),
-                                 y=n,
+                             aes(x = reorder(Name, n),
+                                 y = n,
                                  fill = Name)) +   
   geom_bar(stat = "identity", width = 0.5) +
   labs(y="Number Of Gold Medals", x="Name") +
@@ -416,14 +419,14 @@ b) Chose of of the athlete specific dimensions (e.g. gender, height, weight) and
 ```{r}
 #create violin plot of athletes' weights
 weight_plot <- ggplot(head(player_medals_count,100),
-                      aes(x=Sex, y=Weight,fill=Sex)) + 
+                      aes(x = Sex, y = Weight, fill = Sex)) + 
  geom_violin() +
     scale_fill_viridis(discrete = TRUE,
-                       alpha=0.6,
-                       option="A") +
+                       alpha = 0.6,
+                       option = "A") +
     theme_ipsum() +
     theme(
-      legend.position="none",
+      legend.position = "none",
       plot.title = element_text(size=11)
     ) +
     ggtitle("Violin Chart For Weight Visualization") +
