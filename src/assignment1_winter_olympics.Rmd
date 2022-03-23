@@ -371,15 +371,24 @@ ggplot(host_diff, aes(x=reorder(country, diff), y=diff, fill = country)) +
 a) Now, let's look at the most successful athletes. Provide a visual display of the most successful Winter Olympics athletes of all time.
 ###### We define the most successful player is the one who won most gold medals
 ```{r}
+#filter athlete medals to Gold Winter Olympic medals
+#extract certain athletes' attributes
 player_medals_count = ath[complete.cases(ath[ , 15]),] %>%
   filter(Medal == 'Gold') %>%
   filter(Season == 'Winter')%>% 
   count(Name, Height, Weight, Sex, sort = TRUE)
 
 ```
+
 ```{r}
+#filter to the top 15 players
 top_15_player <- head(player_medals_count, 15)
-plot_top_15_player <- ggplot(top_15_player, aes(x=reorder(Name, n),y=n, fill = Name)) +   
+
+#plot the top 15 players
+plot_top_15_player <- ggplot(top_15_player,
+                             aes(x=reorder(Name, n),
+                                 y=n,
+                                 fill = Name)) +   
   geom_bar(stat = "identity", width = 0.5) +
   labs(y="Number Of Gold Medals", x="Name") +
   ggtitle("Players Who Won Most Gold Medals winter Olympic") +
@@ -391,9 +400,13 @@ plot_top_15_player
 b) Chose of of the athlete specific dimensions (e.g. gender, height, weight) and visualize an interesting pattern in the data.
 ###### What is the average Height and Weight for most successful (top 100) male and female atheletes?
 ```{r}
-weight_plot <- ggplot(head(player_medals_count,100), aes(x=Sex, y=Weight,fill=Sex)) + 
+#create violin plot of athletes' weights
+weight_plot <- ggplot(head(player_medals_count,100),
+                      aes(x=Sex, y=Weight,fill=Sex)) + 
  geom_violin() +
-    scale_fill_viridis(discrete = TRUE, alpha=0.6, option="A") +
+    scale_fill_viridis(discrete = TRUE,
+                       alpha=0.6,
+                       option="A") +
     theme_ipsum() +
     theme(
       legend.position="none",
@@ -403,9 +416,14 @@ weight_plot <- ggplot(head(player_medals_count,100), aes(x=Sex, y=Weight,fill=Se
     xlab("Sex")
 
 
-height_plot <- ggplot(head(player_medals_count,100), aes(x=Sex, y=Height,fill=Sex)) + 
+#create violin plot of athletes' heights
+height_plot <- ggplot(head(player_medals_count,100),
+                      aes(x=Sex,
+                          y=Height,
+                          fill=Sex)) + 
  geom_violin() +
-    scale_fill_viridis(discrete = TRUE, alpha=0.6, option="A") +
+    scale_fill_viridis(discrete = TRUE,
+                       alpha=0.6, option="A") +
     theme_ipsum() +
     theme(
       legend.position="none",
@@ -425,6 +443,7 @@ plot2
 Choose 2 of the plots you created above and add interactivity. One of the plots needs to be written in `plotly` rather than just using the `ggplotly` automation. Briefly describe to the editor why interactivity in these visualization is particularly helpful for a reader.
 ###### By using plotly for Violin Charts, we can bow view the data for a spefific position on diagram
 ```{r}
+#create interactive plotly charts
 library(plotly)
 plotly.w <- ggplotly(weight_plot)
 plotly.h <- ggplotly(height_plot)
@@ -434,13 +453,15 @@ plotly.h
 ```
 
 ```{r}
-
+#create interactive plot of top 15 players
 plot_ly(data = top_15_player, 
         x = ~reorder(Name, desc(n)),
         y = ~n,
         color = ~Name, 
         type = "bar") %>% 
-  layout(title = "Most Successful Atheletes", yaxis = list(title = "Medals"), xaxis = list(title = "Athelete Name"))
+  layout(title = "Most Successful Athletes",
+         yaxis = list(title = "Medals"),
+         xaxis = list(title = "Athelete Name"))
 ```
 
 #### 6. Data Table
@@ -448,8 +469,13 @@ plot_ly(data = top_15_player,
 Prepare a selected data set and add a `datatable` to the output. Make sure the columns are clearly labelled. Select the appropriate options for the data table (e.g. search bar, sorting, column filters etc.). Suggest to the editor which kind of information you would like to provide in a data table in the online version of the article and why.
 
 ```{r}
+#create interactive data table of medals by country GDP
 library(DT)
-datatable(medal_gdp_df, colnames = c("Country Code", "Number of Medals","Country Name","Population","Per Capita GDP"))
+datatable(medal_gdp_df, colnames = c("Country Code",
+                                     "Number of Medals",
+                                     "Country Name",
+                                     "Population",
+                                     "Per Capita GDP"))
 ```
 
 
