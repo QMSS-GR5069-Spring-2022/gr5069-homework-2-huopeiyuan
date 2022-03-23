@@ -256,17 +256,30 @@ Visualize how these rankings differ. Try to highlight a specific pattern (e.g. "
 #adjusted by gdp
 gdp_new <- medal_gdp_df$n/medal_gdp_df$GDP.per.Capita
 gdp_new
+
+#combine dataframes by column
 medal_gdp_df_1 <- cbind(medal_gdp_df,gdp_new)
+
+#create plot of medals by GDP
 medal_gdp_plot <-medal_gdp_df_1 %>%
-  ggplot(aes(x=reorder(NOC, gdp_new), y=gdp_new, fill=NOC))+
+  ggplot(aes(x=reorder(NOC, gdp_new),
+             y=gdp_new,
+             fill=NOC))+
   geom_bar(stat="identity")+
   scale_fill_discrete("NOC")+
   scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
   theme_bw()+
-  theme(legend.position="left", legend.title=element_text(size=8), legend.text=element_text(size=8))+
-  labs(x="Name Of Countries", y="Medals Count", title="Number Of Medals Won Adjusted By Per.Capita.GDP")+
+  theme(legend.position="left",
+        legend.title=element_text(size=8),
+        legend.text=element_text(size=8))+
+  labs(x="Name Of Countries",
+       y="Medals Count",
+       title="Number Of Medals Won Adjusted By Per.Capita.GDP")+
   theme(plot.title=element_text(hjust=0.5, size=15))+
-  theme(axis.text.x=element_text(size=9),axis.text.y=element_text(size=8),axis.title.x=element_text(size=10), axis.title.y= element_text(size=10))+
+  theme(axis.text.x=element_text(size=9),
+        axis.text.y=element_text(size=8),
+        axis.title.x=element_text(size=10),
+        axis.title.y= element_text(size=10))+
   guides(fill="none")+
   coord_flip()
 
@@ -277,16 +290,27 @@ medal_gdp_plot
 #adjusted by gdp
 pop_new <- medal_gdp_df$n/log(medal_gdp_df$Population)
 medal_gdp_df_2 <- cbind(medal_gdp_df,pop_new)
+
+#create plot
 medal_gdp_plot <-medal_gdp_df_2 %>%
-  ggplot(aes(x=reorder(NOC, pop_new), y=pop_new, fill=NOC))+
+  ggplot(aes(x=reorder(NOC, pop_new),
+             y=pop_new,
+             fill=NOC))+
   geom_bar(stat="identity")+
   scale_fill_discrete("NOC")+
   scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
   theme_bw()+
-  theme(legend.position="left", legend.title=element_text(size=8), legend.text=element_text(size=8))+
-  labs(x="Name Of Countries", y="Medals Count", title="Number Of Medals Won Adjusted By Population")+
+  theme(legend.position="left",
+        legend.title=element_text(size=8),
+        legend.text=element_text(size=8))+
+  labs(x="Name Of Countries",
+       y="Medals Count",
+       title="Number Of Medals Won Adjusted By Population")+
   theme(plot.title=element_text(hjust=0.5, size=15))+
-  theme(axis.text.x=element_text(size=9),axis.text.y=element_text(size=8),axis.title.x=element_text(size=10), axis.title.y= element_text(size=10))+
+  theme(axis.text.x=element_text(size=9),
+        axis.text.y=element_text(size=8),
+        axis.title.x=element_text(size=10),
+        axis.title.y= element_text(size=10))+
   guides(fill="none")+
   coord_flip()
 
@@ -303,7 +327,8 @@ Note, that the 19 host cities are noted in the data but not the countries they a
 ```{r echo=TRUE}
 wiki_hosts <- read_html("https://en.wikipedia.org/wiki/List_of_Olympic_Games_host_cities")
 hosts <- html_table(html_nodes(wiki_hosts, "table")[[2]], fill=TRUE)[-1]
-hosts %>% filter(Winter != "") %>%
+hosts %>%
+  filter(Winter != "") %>%
   select(City, Country, Year)
 ```
 
