@@ -334,6 +334,7 @@ hosts %>%
 
 Provide a visualization of the host country advantage (or absence thereof).
 ```{r}
+#filter on non-null host city entries
 host_cities <- hosts %>% filter(Winter != "") %>%
   select(City, Country, Year)
 
@@ -341,28 +342,41 @@ host_cities$Country[host_cities$Country ==	'Russia[h]'] <- 'Russia'
 
 diff <- numeric()
 
+#count number of medals in the host year compared to the previous year's medals
 for(row in 1:nrow(host_cities)){
   if(row != 1){
     year = host_cities[[row, 'Year']]
     country = host_cities[[row, 'Country']]
-    host_medal = ath[complete.cases(ath[ , 15]),] %>% filter(Country == country, Season == 'Winter', Year == year) %>% nrow()
-    previous_medal = ath[complete.cases(ath[ , 15]),] %>% filter(Country == country, Season == 'Winter', Year == year-4) %>% nrow()
+    host_medal = ath[complete.cases(ath[ , 15]),] %>%
+      filter(Country == country,
+             Season == 'Winter',
+             Year == year) %>%
+      nrow()
+    previous_medal = ath[complete.cases(ath[ , 15]),] %>%
+      filter(Country == country,
+             Season == 'Winter',
+             Year == year-4) %>%
+      nrow()
     print('The difference is ')
     print(host_medal- previous_medal)
     diff[row] = host_medal-previous_medal
     } else{
-      diff[row] = 0
+      diff[row] <- 0
     }
   }
 
+#create data frame that aggregates the medal differences by country
 host_diff <- data.frame(country = host_cities$Country, diff)
 
+#create plot
 ggplot(host_diff, aes(x=reorder(country, diff), y=diff, fill = country)) +   
   geom_bar(stat = "identity", width = 0.6) +
-  theme(axis.text.x=element_text(size=6),axis.text.y=element_text(size=8),axis.title.x=element_text(size=10), axis.title.y= element_text(size=10))+
+  theme(axis.text.x=element_text(size=6),
+        axis.text.y=element_text(size=8),
+        axis.title.x=element_text(size=10),
+        axis.title.y= element_text(size=10))+
   labs(y="Medal Difference", x="Host Country") +
   ggtitle("Visualization Of Host Country Advantage") +
-  
   theme_hc()
 ```
 
