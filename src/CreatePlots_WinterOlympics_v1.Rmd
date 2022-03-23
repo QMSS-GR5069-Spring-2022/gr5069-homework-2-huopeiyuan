@@ -89,19 +89,19 @@ Please provide (i) one visualization showing an over time comparison and (ii) on
 **Note:** Currently, the medal data contains information on _each athlete_ competing, including for team events. For example, in 2014 Russia received _4 gold medals for their men's win in Bobsleigh Men's Four_ alone. Since this is usually not how it is done in official medal statistics, try to wrangle the data so that _team events are counted as a single medal_. 
 ##### (i)
 ```{r}
-#count Winter Olympic medals by country by year
+# count Winter Olympic medals by country by year
 medals_count_year <- total_df[complete.cases(total_df[ , 15]),] %>%
   filter(Season == 'Winter') %>%
   count(NOC, Year, sort = TRUE)
 
-#order descending by country
+# order descending by country
 medals_count_year <- medals_count_year[order(medals_count_year$n, decreasing=TRUE),]
 
-#filter to the top 10 countries
+# filter to the top 10 countries
 medals_count_year_top10 <- medals_count_year %>%
   filter(NOC %in% head(medals_count_year, 10)$NOC)
 
-#create plot
+# create plot
 plot <- ggplot(medals_count_year_top10, aes(x = Year, y = n, group = NOC, color = NOC)) +
   geom_line() +
   labs(y ="Number of Medals", x ="Year") +
@@ -114,8 +114,10 @@ plot
 ##### (ii)
 ###### How many winter games for each country
 ```{r}
+# filter on winter games
 is.winter <- total_df[total_df$Season=='Winter',]
 
+# create table of winter games by country
 topcountry.game<-is.winter %>%
   group_by(NOC) %>%
   select(Year) %>%
@@ -128,10 +130,10 @@ topcountry.game
 ###### How many medals of each type the country won
 ###### Here we highlight USA and CAN to make a comparison, since they are both from North America and are both competitive in winter sports event.
 ```{r}
-#how many medals of each type the country won
+# how many medals of each type the country won
 has.medal <- is.winter %>% drop_na(Medal)
 
-#plot gold medals by country
+# plot gold medals by country
 topcountry.gold <- has.medal%>%
   filter(Medal == "Gold") %>%
   group_by(NOC) %>% 
@@ -158,7 +160,7 @@ plot_gold<-head(topcountry.gold,25) %>%
   guides(fill = "none")+
   coord_flip()
 
-#plot silver medals by country
+# plot silver medals by country
 topcountry.silver <- has.medal%>%
   filter(Medal == "Silver") %>%
   group_by(NOC) %>% 
@@ -187,7 +189,7 @@ plot_silver <- head(topcountry.silver,25) %>%
   guides(fill = "none")+
   coord_flip()
 
-#plot bronze medals by country
+# plot bronze medals by country
 topcountry.bronze <- has.medal%>%
   filter(Medal == "Bronze") %>%
   group_by(NOC) %>% 
@@ -215,7 +217,7 @@ plot_bronze<-head(topcountry.bronze,25) %>%
   guides(fill="none")+
   coord_flip()
 
-#aggregate all the plots together
+# aggregate all the plots together
 plot1<-ggarrange(plot_gold, plot_silver, plot_bronze,nrow=1, ncol=3)
 plot1
 ```
@@ -230,16 +232,16 @@ There are different ways to calculate "success". Consider the following variants
   
 Now, adjust the ranking of medal success by (a) GDP per capita and (b) population. You have now three rankings: unadjusted ranking, adjusted by GDP per capita, and adjusted by population.
 ```{r}
-#create data frames by athlete
+# create data frames by athlete
 ath <- merge(ath, noc, by.x = "NOC", by.y = "NOC")
 ath <- merge(ath, gdp, by.x = "NOC", by.y = "Code")
 
-#filter on Winter Olympic athletes
+# filter on Winter Olympic athletes
 medals_count <- ath[complete.cases(ath[ , 15]),] %>%
   filter(Season == 'Winter') %>%
   count(NOC, sort = TRUE)
 
-#count athlete medals
+# count athlete medals
 medals_count <- medals_count[order(medals_count$n, decreasing=TRUE),]
 
 medal_gdp_df <- merge(medals_count, gdp, by.x = "NOC", by.y ="Code")
@@ -256,11 +258,11 @@ Visualize how these rankings differ. Try to highlight a specific pattern (e.g. "
 ###### (i)# of medals adjusted by gdp
 ```{r}
 
-#adjusted by gdp
+# adjusted by gdp
 gdp_new <- medal_gdp_df$n/medal_gdp_df$GDP.per.Capita
 gdp_new
 
-#combine dataframes by column
+# combine dataframes by column
 medal_gdp_df_1 <- cbind(medal_gdp_df, gdp_new)
 
 #create plot of medals by GDP
@@ -288,27 +290,28 @@ medal_gdp_plot <-medal_gdp_df_1 %>%
 
 medal_gdp_plot
 ```
+
 ###### (i)# of medals adjusted by population
 ```{r}
-#adjusted by gdp
+# adjusted by gdp
 pop_new <- medal_gdp_df$n/log(medal_gdp_df$Population)
 medal_gdp_df_2 <- cbind(medal_gdp_df,pop_new)
 
-#create plot
+# create "medals adjusted by gdp" plot
 medal_gdp_plot <-medal_gdp_df_2 %>%
   ggplot(aes(x = reorder(NOC, pop_new),
              y = pop_new,
              fill = NOC))+
   geom_bar(stat = "identity")+
   scale_fill_discrete("NOC")+
-  scale_fill_manual(values=c("USA" = "dodgerblue2", "CAN"= "brown1"))+
+  scale_fill_manual(values = c("USA" = "dodgerblue2", "CAN"= "brown1"))+
   theme_bw()+
   theme(legend.position="left",
         legend.title = element_text(size = 8),
         legend.text = element_text(size = 8))+
-  labs(x="Name Of Countries",
-       y="Medals Count",
-       title="Number Of Medals Won Adjusted By Population")+
+  labs(x = "Name Of Countries",
+       y = "Medals Count",
+       title = "Number Of Medals Won Adjusted By Population")+
   theme(plot.title = element_text(hjust = 0.5, size = 15))+
   theme(axis.text.x = element_text(size = 9),
         axis.text.y = element_text(size = 8),
@@ -328,6 +331,7 @@ Until the 2014 Sochi Winter Olympics (our data for Winter Olympics end here), th
 Note, that the 19 host cities are noted in the data but not the countries they are located in. This happens commonly and often Wikipedia has the [kind of additional data you want for the task](https://en.wikipedia.org/wiki/Winter_Olympic_Games). To save you some time, here is a quick way to get this kind of table from Wikipedia into R:
 
 ```{r echo=TRUE}
+# load host country data
 wiki_hosts <- read_html("https://en.wikipedia.org/wiki/List_of_Olympic_Games_host_cities")
 hosts <- html_table(html_nodes(wiki_hosts, "table")[[2]], fill=TRUE)[-1]
 hosts %>%
@@ -337,7 +341,7 @@ hosts %>%
 
 Provide a visualization of the host country advantage (or absence thereof).
 ```{r}
-#filter on non-null host city entries
+# filter on non-null host city entries
 host_cities <- hosts %>% filter(Winter != "") %>%
   select(City, Country, Year)
 
@@ -345,7 +349,7 @@ host_cities$Country[host_cities$Country ==	'Russia[h]'] <- 'Russia'
 
 home_adv_diff <- numeric()
 
-#count number of medals in the host year compared to the previous year's medals
+# count number of medals in the host year compared to the previous year's medals
 for(row in 1:nrow(host_cities)){
   if(row != 1){
     year = host_cities[[row, 'Year']]
@@ -368,10 +372,10 @@ for(row in 1:nrow(host_cities)){
     }
   }
 
-#create data frame that aggregates the medal differences by country
+# create data frame that aggregates the medal differences by country
 host_diff <- data.frame(country = host_cities$Country, home_adv_diff)
 
-#create plot
+# create plot
 ggplot(host_diff, aes(x = reorder(country, diff), y = home_adv_diff, fill = country)) +   
   geom_bar(stat = "identity", width = 0.6) +
   theme(axis.text.x = element_text(size = 6),
@@ -386,10 +390,11 @@ ggplot(host_diff, aes(x = reorder(country, diff), y = home_adv_diff, fill = coun
 #### 4. Most successful athletes
 
 a) Now, let's look at the most successful athletes. Provide a visual display of the most successful Winter Olympics athletes of all time.
+
 ###### We define the most successful player is the one who won most gold medals
 ```{r}
-#filter athlete medals to Gold Winter Olympic medals
-#extract certain athletes' attributes
+# filter athlete medals to Gold Winter Olympic medals
+# extract certain athletes' attributes
 player_medals_count = ath[complete.cases(ath[ , 15]),] %>%
   filter(Medal == 'Gold') %>%
   filter(Season == 'Winter')%>% 
@@ -398,10 +403,10 @@ player_medals_count = ath[complete.cases(ath[ , 15]),] %>%
 ```
 
 ```{r}
-#filter to the top 15 players
+# filter to the top 15 players
 top_15_player <- head(player_medals_count, 15)
 
-#plot the top 15 players
+# plot the top 15 players
 plot_top_15_player <- ggplot(top_15_player,
                              aes(x = reorder(Name, n),
                                  y = n,
@@ -415,9 +420,11 @@ plot_top_15_player
 
 
 b) Chose of of the athlete specific dimensions (e.g. gender, height, weight) and visualize an interesting pattern in the data.
+
 ###### What is the average Height and Weight for most successful (top 100) male and female atheletes?
+
 ```{r}
-#create violin plot of athletes' weights
+# create violin plot of athletes' weights
 weight_plot <- ggplot(head(player_medals_count,100),
                       aes(x = Sex, y = Weight, fill = Sex)) + 
  geom_violin() +
@@ -433,7 +440,7 @@ weight_plot <- ggplot(head(player_medals_count,100),
     xlab("Sex")
 
 
-#create violin plot of athletes' heights
+# create violin plot of athletes' heights
 height_plot <- ggplot(head(player_medals_count,100),
                       aes(x=Sex,
                           y=Height,
@@ -460,7 +467,7 @@ plot2
 Choose 2 of the plots you created above and add interactivity. One of the plots needs to be written in `plotly` rather than just using the `ggplotly` automation. Briefly describe to the editor why interactivity in these visualization is particularly helpful for a reader.
 ###### By using plotly for Violin Charts, we can bow view the data for a spefific position on diagram
 ```{r}
-#create interactive plotly charts
+# create interactive plotly charts
 library(plotly)
 plotly.w <- ggplotly(weight_plot)
 plotly.h <- ggplotly(height_plot)
@@ -470,7 +477,7 @@ plotly.h
 ```
 
 ```{r}
-#create interactive plot of top 15 players
+# create interactive plot of top 15 players
 plot_ly(data = top_15_player, 
         x = ~reorder(Name, desc(n)),
         y = ~n,
@@ -486,7 +493,7 @@ plot_ly(data = top_15_player,
 Prepare a selected data set and add a `datatable` to the output. Make sure the columns are clearly labelled. Select the appropriate options for the data table (e.g. search bar, sorting, column filters etc.). Suggest to the editor which kind of information you would like to provide in a data table in the online version of the article and why.
 
 ```{r}
-#create interactive data table of medals by country GDP
+# create interactive data table of medals by country GDP
 library(DT)
 datatable(medal_gdp_df, colnames = c("Country Code",
                                      "Number of Medals",
