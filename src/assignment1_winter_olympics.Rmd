@@ -70,9 +70,9 @@ In addition, you are provided with some additional information about the countri
 a) Combine the information in the three spreadsheets `athletes_and_events.csv`, `noc_regions.csv`, and  `gdp_pop.csv`. Note, that the `noc_regions.csv` is the set all NOC regions, while `gdp_pop.csv` only contains a snapshot of the current set of countries. You have to decide what to do with some [countries that competed under different designations in the past (e.g. Germany and Russia)](https://en.wikipedia.org/wiki/All-time_Olympic_Games_medal_table) and some defunct countries and whether and how to combine their totals. Make sure to be clear about your decisions here, so that the editor (and potentially a user of your visualizations) understands what you did.
 
 ```{r}
-ath<-read.csv("athletes_and_events.csv")
-gdp <- read.csv("gdp_pop.csv")
-noc <- read.csv("noc_regions.csv")
+ath<-read.csv("data/athletes_and_events.csv")
+gdp <- read.csv("data/gdp_pop.csv")
+noc <- read.csv("data/noc_regions.csv")
 temp_df <- merge(ath, noc, by.x = "NOC", 
              by.y = "NOC", all.x = TRUE, all.y = FALSE)
 total_df <- merge(temp_df, noc, by.x = "NOC", 
