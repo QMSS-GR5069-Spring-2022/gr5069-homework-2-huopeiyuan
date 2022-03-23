@@ -1,4 +1,4 @@
-#Data Visualization Exercise - Winter Olympics
+# Data Visualization Exercise - Winter Olympics
 
 ### This repository involves creating various data visualizations based on Winter Olympic data, including raw data, analysis files, and outputs.
 
