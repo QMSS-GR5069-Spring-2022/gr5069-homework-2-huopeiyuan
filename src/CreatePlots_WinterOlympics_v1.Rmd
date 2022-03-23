@@ -12,7 +12,7 @@ Winter Olympics Medals over Time
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = '/Users/peiyuanhuo/Desktop/QMSS5063 Data Visualization/assignment-1---winter-olympics-huopeiyuan-main/data')
+knitr::opts_knit$set(root.dir = '/visualization')
 
 #packages to load
 library(ggplot2)
