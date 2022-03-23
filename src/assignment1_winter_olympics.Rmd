@@ -227,15 +227,24 @@ There are different ways to calculate "success". Consider the following variants
   
 Now, adjust the ranking of medal success by (a) GDP per capita and (b) population. You have now three rankings: unadjusted ranking, adjusted by GDP per capita, and adjusted by population.
 ```{r}
-ath = merge(ath, noc, by.x="NOC", by.y="NOC")
-ath = merge(ath, gdp, by.x="NOC", by.y="Code")
-medals_count = ath[complete.cases(ath[ , 15]),] %>% filter(Season == 'Winter')%>% count(NOC, sort = TRUE)
+#create data frames by athlete
+ath <- merge(ath, noc, by.x="NOC", by.y="NOC")
+ath <- merge(ath, gdp, by.x="NOC", by.y="Code")
 
+#filter on Winter Olympic athletes
+medals_count <- ath[complete.cases(ath[ , 15]),] %>%
+  filter(Season == 'Winter') %>%
+  count(NOC, sort = TRUE)
+
+#count athlete medals
 medals_count <- medals_count[order(medals_count$n, decreasing=TRUE),]
 
-medal_gdp_df = merge(medals_count, gdp, by.x="NOC", by.y="Code")
+medal_gdp_df <- merge(medals_count, gdp, by.x="NOC", by.y="Code")
 medal_gdp_df <- merge(medals_count, gdp, by.x = "NOC", 
-             by.y = "Code", all.x = TRUE, all.y = FALSE)
+             by.y = "Code",
+             all.x = TRUE,
+             all.y = FALSE)
+
 medal_gdp_df <- medal_gdp_df[order(medal_gdp_df$n, decreasing=TRUE),]
 
 ```
