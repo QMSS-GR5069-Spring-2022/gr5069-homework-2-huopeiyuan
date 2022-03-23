@@ -13,6 +13,8 @@ Winter Olympics Medals over Time
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = '/Users/peiyuanhuo/Desktop/QMSS5063 Data Visualization/assignment-1---winter-olympics-huopeiyuan-main/data')
+
+#packages to load
 library(ggplot2)
 library(magrittr)
 library(dplyr)
@@ -87,11 +89,19 @@ Please provide (i) one visualization showing an over time comparison and (ii) on
 **Note:** Currently, the medal data contains information on _each athlete_ competing, including for team events. For example, in 2014 Russia received _4 gold medals for their men's win in Bobsleigh Men's Four_ alone. Since this is usually not how it is done in official medal statistics, try to wrangle the data so that _team events are counted as a single medal_. 
 ##### (i)
 ```{r}
+#count Winter Olympic medals by country by year
+medals_count_year <- total_df[complete.cases(total_df[ , 15]),] %>%
+  filter(Season == 'Winter') %>%
+  count(NOC, Year, sort = TRUE)
 
-
-medals_count_year = total_df[complete.cases(total_df[ , 15]),] %>% filter(Season == 'Winter')%>% count(NOC, Year, sort = TRUE)
+#order descending by country
 medals_count_year <- medals_count_year[order(medals_count_year$n, decreasing=TRUE),]
-medals_count_year_top10 <- medals_count_year %>% filter(NOC %in% head(medals_count_year, 10)$NOC)
+
+#filter to the top 10 countries
+medals_count_year_top10 <- medals_count_year %>%
+  filter(NOC %in% head(medals_count_year, 10)$NOC)
+
+#create plot
 plot <- ggplot(medals_count_year_top10, aes(x = Year, y = n, group = NOC, color = NOC)) +
   geom_line() +
   labs(y="Number of Medals", x="Year") +
